@@ -1,0 +1,34 @@
+https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=1023
+
+#include <stdio.h>
+#include <string.h>
+
+int main(){
+ char input;
+ char keys[] ={"`1234567890-=QWERTYUIOP[]\\ASDFGHJKL;'ZXCVBNM,./"};
+ int len_keys = strlen(keys);
+ char end_keys[]={"`QAZ"};
+ int len_end = strlen(end_keys);
+ int skip;
+
+ while(scanf("%c",&input) != EOF){
+  skip = 0;
+  for(int i = 0; i < len_end; i++){
+   if(end_keys[i] == input){
+    skip = 1;
+    break;
+   }
+  }
+
+  if(skip != 1){
+   for(int i = 0; i < len_keys; i++){
+    if(keys[i] == input){
+     input = keys[i-1];
+     break;
+    }
+   }
+  }
+  printf("%c", input);
+ }
+ return 0;
+}
