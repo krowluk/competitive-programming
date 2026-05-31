@@ -1,0 +1,32 @@
+https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=36
+
+#include <stdio.h>
+
+int main(){
+ int i, j, cycle, num, last_cycle, start, bigger, lesser;
+
+ while(scanf("%d %d", &i, &j) != EOF){
+  start = i;
+  last_cycle = 0;
+  if(i < j){
+   bigger = j; lesser = i;
+  }
+  else{
+   bigger = i; lesser = j;
+  }
+  while(lesser <= bigger){
+   cycle = 0;
+   num = lesser;
+   while(true){
+    cycle++;
+    if(num == 1) break;
+    if(num % 2 == 1) num = num * 3 + 1;
+    else num /= 2;
+   }
+   if(last_cycle < cycle) last_cycle = cycle;
+   lesser++;
+  }
+  printf("%d %d %d\n", start, j, last_cycle);
+ }
+ return 0;
+}
