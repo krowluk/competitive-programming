@@ -1,0 +1,19 @@
+https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=2091
+
+#include <stdio.h>
+
+int main(){
+ int cola, empty, total;
+ while(scanf("%d", &cola) != EOF){
+  empty = total = cola;
+  while(empty >= 3){
+   cola = empty / 3;
+   empty %= 3;
+   total += cola;
+   empty += cola;
+  }
+
+  if(empty == 2) total++;
+  printf("%d\n", total);
+ }
+}
