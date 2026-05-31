@@ -1,0 +1,25 @@
+http://poj.org/problem?id=1218
+
+#include <stdio.h>
+
+int main(){
+ int lines, cells;
+ scanf("%d", &lines);
+
+ for(int i = 0; i < lines; i++){
+  scanf("%d", &cells);
+  int cage[101] = {0}, prisoners = 0;
+
+  for(int j = 1; j <= cells; j++){
+   for(int k = j; k <= cells; k += j){
+    cage[k] =! cage[k];
+   }
+  }
+
+  for(int x = 0; x <= cells; x++){
+   prisoners += cage[x];
+  }
+  printf("%d\n", prisoners);
+ }
+ return 0;
+}
