@@ -1,0 +1,174 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <sstream>
+
+using namespace std;
+long sum;
+
+struct node{
+ char KEY[6];
+ int VALUE;
+ int height;
+ struct node *left;
+ struct node *right;
+};
+
+int max(int a, int b){
+ return (a<b) ? b : a;
+}
+
+int getHeight(struct node *localRoot){
+ if(localRoot == NULL) return 0;
+ return localRoot->height;
+}
+
+int getBalFactor(struct node *localRoot){
+ if(localRoot == NULL) return 0;
+ return getHeight(localRoot->left) - getHeight(localRoot->right);
+}
+
+struct node *newNode(char *NEWKEY, int NEWVALUE){
+ struct node *nNode = (struct node *)malloc(sizeof(struct node));
+ strcpy(nNode->KEY, NEWKEY);
+ nNode->VALUE = NEWVALUE;
+ nNode->left = NULL;
+ nNode->right = NULL;
+ nNode->height = 1;
+ return nNode;
+}
+
+struct node *leftRotate(struct node *x){
+ struct node *y = x->right;
+ struct node *b = y->left;
+
+ y->left = x;
+ x->right = b;
+ x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+ y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+ return y;
+}
+
+struct node *rightRotate(struct node *y){
+ struct node *x = y->left;
+ struct node *b = x->right;
+
+ x->right = y;
+ y->left = b;
+ 
+ y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+ x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+ return x;
+}
+
+struct node *reBalance(struct node *localRoot){
+ localRoot->height = max(getHeight(localRoot->left), getHeight(localRoot->right)) +1;
+ int bfact = getBalFactor(localRoot);
+
+ if(bfact > 1 && getBalFactor(localRoot->left) < 0){
+  localRoot->left = leftRotate(localRoot->left);
+  return rightRotate(localRoot);
+ }
+ if(bfact > 1 && getBalFactor(localRoot->left) >= 0){
+  return rightRotate(localRoot);
+ }
+ if(bfact < -1 && getBalFactor(localRoot->right) <= 0){
+  return leftRotate(localRoot);
+ }
+ if(bfact < -1 && getBalFactor(localRoot->right) > 0){
+  localRoot->right = rightRotate(localRoot->right);
+  return leftRotate(localRoot);
+ }
+ return localRoot;
+}
+
+struct node *searchVal(struct node *localRoot, char *KEY){
+ if(localRoot == NULL){
+  sum += 0;
+  return NULL;
+ }
+ if(strcmp(localRoot->KEY, KEY) < 0){
+  localRoot->right = searchVal(localRoot->right, KEY);
+ } else if (strcmp(localRoot->KEY, KEY) > 0){
+  localRoot->left = searchVal(localRoot->left, KEY);
+ } else {
+  sum += localRoot->VALUE;
+ }
+ return reBalance(localRoot);
+}
+
+//void inOrder(struct node *localRoot){
+// if(localRoot == NULL) return;
+// inOrder(localRoot->left);
+// printf(" %s-%d ", localRoot->KEY, localRoot->VALUE);
+// inOrder(localRoot->right);
+//}
+
+struct node *insertVal(struct node *localRoot, char *NEWKEY, int NEWVALUE){
+ if(localRoot == NULL) return newNode(NEWKEY, NEWVALUE);
+ if(strcmp(localRoot->KEY, NEWKEY) < 0){
+  localRoot->right = insertVal(localRoot->right, NEWKEY, NEWVALUE);
+ } else if(strcmp(localRoot->KEY, NEWKEY) > 0){
+  localRoot->left = insertVal(localRoot->left, NEWKEY, NEWVALUE);
+ } else return localRoot;
+ return reBalance(localRoot);
+}
+
+int main(){
+ struct node *root = NULL;
+ char alphs[6], input[6];
+ int idx = 0;
+ for(alphs[0] = 'a'; alphs[0] <= 'z'; alphs[0]++){
+  alphs[1] = '\0';
+  idx++;
+  root = insertVal(root, alphs, idx);
+ }
+ for(alphs[0] = 'a'; alphs[0] <= 'z'-1; alphs[0]++){
+  for(alphs[1] = alphs[0]+1; alphs[1] <= 'z'; alphs[1]++){
+   alphs[2] = '\0';
+   idx++;
+   root = insertVal(root, alphs, idx);
+  }
+ }
+ for(alphs[0] = 'a'; alphs[0] <= 'z'-2; alphs[0]++){
+  for(alphs[1] = alphs[0]+1; alphs[1] <= 'z'-1; alphs[1]++){
+   for(alphs[2] = alphs[1]+1; alphs[2] <= 'z'; alphs[2]++){
+    alphs[3] = '\0';
+    idx++;
+    root = insertVal(root, alphs, idx);
+   }
+  }
+ }
+ for(alphs[0] = 'a'; alphs[0] <= 'z'-2; alphs[0]++){
+  for(alphs[1] = alphs[0]+1; alphs[1] <= 'z'-1; alphs[1]++){
+   for(alphs[2] = alphs[1]+1; alphs[2] <= 'z'; alphs[2]++){
+    for(alphs[3] = alphs[2]+1; alphs[3] <= 'z'; alphs[3]++){
+     alphs[4] = '\0';
+     idx++;
+     root = insertVal(root, alphs, idx);
+    }
+   }
+  }
+ }
+ for(alphs[0] = 'a'; alphs[0] <= 'z'-2; alphs[0]++){
+  for(alphs[1] = alphs[0]+1; alphs[1] <= 'z'-1; alphs[1]++){
+   for(alphs[2] = alphs[1]+1; alphs[2] <= 'z'; alphs[2]++){
+    for(alphs[3] = alphs[2]+1; alphs[3] <= 'z'; alphs[3]++){
+     for(alphs[4] = alphs[3]+1; alphs[4] <= 'z'; alphs[4]++){
+      alphs[5] = '\0';
+      idx++;
+      root = insertVal(root, alphs, idx);
+     }
+    }
+   }
+  }
+ }
+
+ while(scanf("%s", &input) != EOF){
+  sum = 0;
+  root = searchVal(root, input);
+  printf("%d\n", sum);
+ }
+
+ return 0;
+}
