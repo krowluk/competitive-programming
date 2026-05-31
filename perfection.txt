@@ -1,0 +1,21 @@
+https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=318
+
+#include <stdio.h>
+
+int main(){
+ int num, sum;
+ printf("PERFECTION OUTPUT\n");
+ while(true){
+  scanf("%d", &num);
+  if(num == 0) break;
+  sum = 0;
+  for(int j = 1; j < num; j++){
+   if( num%j == 0) sum += j;
+  }
+  if(sum == num) printf("%5d  PERFECT\n", num);
+  else if(sum > num) printf("%5d  ABUNDANT\n", num);
+  else if(sum < num) printf("%5d  DEFICIENT\n", num);
+ }
+ printf("END OF OUTPUT\n");
+ return 0;
+}
