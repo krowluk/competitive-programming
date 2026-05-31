@@ -1,0 +1,41 @@
+http://poj.org/problem?id=1563
+
+#include <stdio.h>
+
+int main(){
+ int down, days, success;
+ float up, fatigue, snail_pos, height;
+ while(true){
+  snail_pos = 0;
+  scanf("%f %f %d %f", &height, &up, &down, &fatigue);
+  days = 0;
+  success = 0;
+  if(height == 0){
+   break;
+  }
+  fatigue = up * fatigue / 100;
+  while(true){
+   days ++;
+   snail_pos += up;
+   if(snail_pos > height){
+    success = 1;
+    break;
+   }
+   snail_pos -= down;
+
+   if(snail_pos < 0)
+    break; 
+
+   up = up - fatigue;
+   if(up <= 0){
+    up = 0;
+   }
+  }
+  if(success == 0){
+   printf("failure on day %d\n", days);
+  }
+  else
+   printf("success on day %d\n", days);
+ }
+ return 0;
+}
